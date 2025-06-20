@@ -156,6 +156,40 @@ export function renderDashboard({ workflows, container }) {
         grid.appendChild(groupDiv);
     });
     dashboardRoot.appendChild(grid);
+
+    // Add scroll arrows above the grid (move this before grid is appended)
+    const scrollBar = document.createElement('div');
+    scrollBar.className = 'gh-dashboard-scroll-arrows';
+    const leftBtn = document.createElement('button');
+    leftBtn.className = 'gh-dashboard-arrow-btn';
+    leftBtn.innerHTML = '&#8592;';
+    leftBtn.title = 'Scroll left';
+    leftBtn.disabled = true;
+    const rightBtn = document.createElement('button');
+    rightBtn.className = 'gh-dashboard-arrow-btn';
+    rightBtn.innerHTML = '&#8594;';
+    rightBtn.title = 'Scroll right';
+    scrollBar.appendChild(leftBtn);
+    scrollBar.appendChild(document.createElement('div')); // Spacer
+    scrollBar.appendChild(rightBtn);
+    dashboardRoot.appendChild(scrollBar);
+
+    // Now append the grid after the scrollBar
+    dashboardRoot.appendChild(grid);
+
+    // Scroll logic
+    function updateArrowState() {
+        leftBtn.disabled = grid.scrollLeft <= 5;
+        rightBtn.disabled = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 5;
+    }
+    leftBtn.onclick = () => {
+        grid.scrollBy({ left: -grid.clientWidth * 0.8, behavior: 'smooth' });
+    };
+    rightBtn.onclick = () => {
+        grid.scrollBy({ left: grid.clientWidth * 0.8, behavior: 'smooth' });
+    };
+    grid.addEventListener('scroll', updateArrowState);
+    setTimeout(updateArrowState, 100); // Initial state
 }
 
 export function addThemeToggle(dashboardRoot) {

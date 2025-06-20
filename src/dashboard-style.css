@@ -16,12 +16,19 @@
     --gh-pill-hover-bg: #30363d;
 }
 .gh-dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    display: flex;
+    flex-direction: row;
     gap: 20px;
     padding: 30px 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    max-width: 100%;
 }
 .gh-dashboard-item {
+    flex: 0 0 calc(33.333% - 14px); /* 3 columns max, minus gap */
+    min-width: 320px;
+    max-width: 420px;
+    scroll-snap-align: start;
     background: var(--gh-card-bg, #fff);
     border-radius: 10px;
     box-shadow: var(--gh-card-shadow, 0 2px 8px rgba(0,0,0,0.04));
@@ -98,5 +105,38 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 .gh-theme-toggle:hover {
+    background: var(--gh-card-hover-bg, #eaecef);
+}
+.gh-dashboard-scroll-arrows {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+.gh-dashboard-arrow-btn {
+    pointer-events: auto;
+    background: var(--gh-card-bg, #fff);
+    border: 1px solid var(--gh-card-border, #d0d7de);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    color: var(--gh-text, #24292f);
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: background 0.2s, color 0.2s;
+    z-index: 2;
+    opacity: 0.85;
+}
+.gh-dashboard-arrow-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+.gh-dashboard-arrow-btn:hover:not(:disabled) {
     background: var(--gh-card-hover-bg, #eaecef);
 }
