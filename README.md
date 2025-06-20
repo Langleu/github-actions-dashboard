@@ -2,6 +2,8 @@
 
 This UserScript enhances the GitHub Actions overview page for any public repository by providing a modern, grouped, and visually appealing dashboard of all workflows.
 
+![GitHub Actions Dashboard Example](./.github/assets/overview.png)
+
 ## Disclaimer
 
 > [!IMPORTANT]
