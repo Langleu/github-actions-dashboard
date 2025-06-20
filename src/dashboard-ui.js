@@ -25,7 +25,8 @@ export function renderDashboard({ workflows, container }) {
         const workflowEntry = {
             name: parts.length >= 3 ? parts.slice(2).join(' - ') : workflow.name,
             url: workflow.html_url,
-            badge_url: workflow.badge_url || null
+            badge_url: workflow.badge_url || null,
+            state: workflow.state // include state for visual indication
         };
         if (parts.length >= 3) {
             const group = parts[0];
@@ -79,6 +80,12 @@ export function renderDashboard({ workflows, container }) {
                 namePill.href = fileUrl;
                 namePill.target = '_blank';
                 namePill.rel = 'noopener noreferrer';
+                // Visually indicate if workflow is not active
+                if (entry.state && entry.state !== 'active') {
+                    namePill.style.opacity = '0.5';
+                    namePill.style.textDecoration = 'line-through';
+                    namePill.title = `Workflow state: ${entry.state}`;
+                }
                 // Always show a status span
                 let statusSpan = document.createElement('span');
                 statusSpan.style.marginLeft = '8px';
