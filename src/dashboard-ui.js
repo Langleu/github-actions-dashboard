@@ -44,9 +44,21 @@ export function renderDashboard({ workflows, container }) {
     // Create grid wrapper
     const grid = document.createElement('div');
     grid.className = 'gh-dashboard-grid';
+    const categoryCount = Object.keys(groups).length;
+    if (categoryCount < 3) {
+        grid.classList.add('fewer');
+        grid.style.setProperty('--cat-count', categoryCount);
+    } else {
+        grid.classList.add('max-3');
+    }
     Object.keys(groups).forEach(group => {
         const groupDiv = document.createElement('div');
         groupDiv.className = 'gh-dashboard-item';
+        if (categoryCount < 3) {
+            groupDiv.classList.add('flex-fill');
+        } else {
+            groupDiv.classList.add('flex-third');
+        }
         const groupHeading = document.createElement('div');
         groupHeading.style.fontWeight = 'bold';
         groupHeading.style.marginBottom = '10px';
