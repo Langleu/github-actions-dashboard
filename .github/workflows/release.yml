@@ -30,7 +30,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/index.js
-          git commit -m "chore: update userscript version to ${{ github.event.release.tag_name }} for release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
+          git commit -m "chore: update userscript version to ${{ github.event.release.tag_name }}" || echo "No changes to commit"
           git push origin HEAD:${{ github.event.repository.default_branch }}
 
       - name: Upload userscript as release asset
