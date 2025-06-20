@@ -10,8 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
-import { injectDashboardStyles, renderDashboard, addThemeToggle } from './dashboard-ui.js';
-import { fetchWithTimeoutAndRetry } from './dashboard-utils.js';
+import { injectDashboardStyles, renderDashboard } from './dashboard-ui.js';
 
 (function() {
     'use strict';
