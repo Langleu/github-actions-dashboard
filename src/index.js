@@ -21,7 +21,7 @@ import { injectDashboardStyles, renderDashboard } from './dashboard-ui.js';
     // Find the container
     const container = document.querySelector('div.container-xl');
     if (!container) return;
-    container.innerHTML = '';
+    // Do not clear container until fetch is successful
 
     // Dynamically determine the API URL based on the current /actions page
     const match = window.location.pathname.match(/^\/([^\/]+)\/([^\/]+)\/actions/);
@@ -43,11 +43,13 @@ import { injectDashboardStyles, renderDashboard } from './dashboard-ui.js';
         })
         .then(data => {
             if (Array.isArray(data.workflows)) {
-                // Render dashboard UI
+                // Only clear and render if fetch succeeded
+                container.innerHTML = '';
                 renderDashboard({ workflows: data.workflows, container });
             }
         })
         .catch(error => {
+            // Do not modify the page if fetch fails
             console.error('Fetch error:', error);
         });
 })();

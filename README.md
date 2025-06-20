@@ -1,6 +1,6 @@
 # GitHub Actions Dashboard UserScript
 
-This UserScript enhances the GitHub Actions overview page for any repository by providing a modern, grouped, and visually appealing dashboard of all workflows.
+This UserScript enhances the GitHub Actions overview page for any public repository by providing a modern, grouped, and visually appealing dashboard of all workflows.
 
 ## Disclaimer
 
@@ -10,7 +10,7 @@ This UserScript enhances the GitHub Actions overview page for any repository by 
 
 ## Features
 
-- Replaces the default Actions overview with a responsive dashboard.
+- Replaces the default public repo Actions overview with a responsive dashboard.
 - Groups workflows by their naming convention (`Group - Category - Name`).
 - Displays each workflow as a clickable box linking to its Actions UI.
 - Shows the current status (e.g., passing, failing) next to each workflow using the workflow badge.
