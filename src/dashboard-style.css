@@ -1,0 +1,85 @@
+/* GitHub Actions Dashboard Styles */
+.gh-dashboard-root {
+    background: var(--gh-bg, #f6f8fa);
+    color: var(--gh-text, #24292f);
+    border-radius: 12px;
+    padding: 24px 0 0 0;
+}
+.gh-dashboard-root.gh-dark-mode {
+    --gh-bg: #22272e;
+    --gh-card-bg: #22272e;
+    --gh-card-border: #30363d;
+    --gh-card-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    --gh-card-hover-bg: #272b33;
+    --gh-text: #c9d1d9;
+    --gh-pill-bg: #22272e;
+    --gh-pill-hover-bg: #30363d;
+}
+.gh-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 30px 0;
+}
+.gh-dashboard-item {
+    background: var(--gh-card-bg, #fff);
+    border-radius: 10px;
+    box-shadow: var(--gh-card-shadow, 0 2px 8px rgba(0,0,0,0.04));
+    border: 1px solid var(--gh-card-border, #d0d7de);
+    padding: 24px 18px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--gh-text, #24292f);
+    text-align: left;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+.gh-dashboard-item:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    background: var(--gh-card-hover-bg, #eaecef);
+}
+.gh-category-label {
+    font-weight: 600;
+    margin: 8px 0 4px 0;
+    font-size: 1em;
+}
+.gh-names-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.gh-name-pill {
+    background: var(--gh-pill-bg, #fff);
+    border: 1px solid var(--gh-card-border, #d0d7de);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 0.98em;
+    font-weight: 400;
+    color: var(--gh-text, #24292f);
+    margin: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.gh-name-pill:hover {
+    background: var(--gh-pill-hover-bg, #f0f6fc);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+.gh-theme-toggle {
+    display: inline-block;
+    margin: 18px 0 18px 0;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--gh-card-border, #d0d7de);
+    background: var(--gh-card-bg, #fff);
+    color: var(--gh-text, #24292f);
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.gh-theme-toggle:hover {
+    background: var(--gh-card-hover-bg, #eaecef);
+}
