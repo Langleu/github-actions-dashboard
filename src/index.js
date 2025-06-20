@@ -36,16 +36,39 @@ import { injectDashboardStyles, renderDashboard } from './dashboard-ui.js';
         return;
     }
 
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            if (Array.isArray(data.workflows)) {
-                // Only clear and render if fetch succeeded
+    async function fetchAllWorkflows(apiUrl) {
+        let allWorkflows = [];
+        let page = 1;
+        let hasMore = true;
+        while (hasMore) {
+            const url = apiUrl + `&page=${page}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                if (Array.isArray(data.workflows)) {
+                    allWorkflows = allWorkflows.concat(data.workflows);
+                    if (data.workflows.length < 100) {
+                        hasMore = false;
+                    } else {
+                        page++;
+                    }
+                } else {
+                    hasMore = false;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                hasMore = false;
+            }
+        }
+        return allWorkflows;
+    }
+
+    fetchAllWorkflows(apiUrl)
+        .then(workflows => {
+            if (Array.isArray(workflows) && workflows.length > 0) {
                 container.innerHTML = '';
-                renderDashboard({ workflows: data.workflows, container });
+                renderDashboard({ workflows, container });
             }
         })
         .catch(error => {
