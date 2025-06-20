@@ -66,14 +66,19 @@ export function renderDashboard({ workflows, container, categories: passedCatego
 
     const dashboardRoot = document.createElement('div');
     dashboardRoot.className = 'gh-dashboard-root';
-    addThemeToggle(dashboardRoot);
 
-    // Category management UI
+    // Navigation bar: categories management (left) and theme toggle (right)
+    const navBar = document.createElement('div');
+    navBar.style.display = 'flex';
+    navBar.style.justifyContent = 'space-between';
+    navBar.style.alignItems = 'center';
+    navBar.style.marginBottom = '18px';
+
+    // Left: Category management UI
     const catBar = document.createElement('div');
     catBar.style.display = 'flex';
     catBar.style.gap = '10px';
-    catBar.style.marginBottom = '18px';
-    // Add Category button
+
     const addBtn = document.createElement('button');
     addBtn.textContent = '+ Add Category';
     addBtn.className = 'gh-theme-toggle';
@@ -87,7 +92,7 @@ export function renderDashboard({ workflows, container, categories: passedCatego
         }
     };
     catBar.appendChild(addBtn);
-    // Reset button
+
     const resetBtn = document.createElement('button');
     resetBtn.textContent = 'Reset Categories';
     resetBtn.className = 'gh-theme-toggle';
@@ -99,7 +104,11 @@ export function renderDashboard({ workflows, container, categories: passedCatego
         }
     };
     catBar.appendChild(resetBtn);
-    dashboardRoot.appendChild(catBar);
+    navBar.appendChild(catBar);
+
+    // Right: Theme toggle (directly in navBar, not in a wrapper div)
+    addThemeToggle(navBar, dashboardRoot);
+    dashboardRoot.appendChild(navBar);
 
     // Main grid
     const grid = document.createElement('div');
@@ -279,7 +288,7 @@ export function renderDashboard({ workflows, container, categories: passedCatego
     container.appendChild(dashboardRoot);
 }
 
-export function addThemeToggle(dashboardRoot) {
+export function addThemeToggle(navBar, dashboardRoot) {
     let toggle = document.createElement('button');
     toggle.className = 'gh-theme-toggle';
     let darkMode = localStorage.getItem('gh_dashboard_dark_mode') === 'true';
@@ -287,6 +296,7 @@ export function addThemeToggle(dashboardRoot) {
         dashboardRoot.classList.add('gh-dark-mode');
         toggle.textContent = 'Switch to Light Mode';
     } else {
+        dashboardRoot.classList.remove('gh-dark-mode');
         toggle.textContent = 'Switch to Dark Mode';
     }
     toggle.onclick = function() {
@@ -300,5 +310,5 @@ export function addThemeToggle(dashboardRoot) {
         }
         localStorage.setItem('gh_dashboard_dark_mode', darkMode);
     };
-    dashboardRoot.appendChild(toggle);
+    navBar.appendChild(toggle);
 }
