@@ -94,10 +94,11 @@ export function renderDashboard({ workflows, container }) {
                 // Name span
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = entry.name;
+                // Remove truncation styles for full name display
                 nameSpan.style.flex = '1 1 auto';
-                nameSpan.style.overflow = 'hidden';
-                nameSpan.style.textOverflow = 'ellipsis';
-                nameSpan.style.whiteSpace = 'nowrap';
+                nameSpan.style.overflow = 'visible';
+                nameSpan.style.textOverflow = 'unset';
+                nameSpan.style.whiteSpace = 'normal';
                 namePill.appendChild(nameSpan);
                 // Status span
                 let statusSpan = document.createElement('span');
