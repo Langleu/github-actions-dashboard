@@ -29,7 +29,7 @@ import { injectDashboardStyles, renderDashboard } from './dashboard-ui.js';
     if (match) {
         const owner = match[1];
         const repo = match[2];
-        apiUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows`;
+        apiUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows?per_page=100`;
     }
     if (!apiUrl) {
         console.error('Could not determine repository for GitHub Actions dashboard.');
