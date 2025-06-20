@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         GitHub Actions Dashboard
-// @namespace    http://tampermonkey.net/
-// @version      2025-06-20
 // @description  A better GitHub Actions Overview
+// @version      0.1.0
+// @namespace    https://github.com/Langleu/github-actions-dashboard
+// @supportURL   https://github.com/Langleu/github-actions-dashboard
 // @author       Langleu
 // @match        https://github.com/*/*/actions
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
@@ -30,7 +31,7 @@
             padding: 24px 0 0 0;
         }
         .gh-dashboard-root.gh-dark-mode {
-            --gh-bg: #22272e;
+            --gh-bg: #212830;
             --gh-card-bg: #22272e;
             --gh-card-border: #30363d;
             --gh-card-shadow: 0 2px 8px rgba(0,0,0,0.18);
@@ -171,7 +172,12 @@
                 const groups = {};
                 data.workflows.forEach(workflow => {
                     const parts = workflow.name.split(' - ');
-                    const workflowEntry = { name: parts.length >= 3 ? parts.slice(2).join(' - ') : workflow.name, url: workflow.html_url };
+                    // Ensure badge_url is included in every workflow entry
+                    const workflowEntry = {
+                        name: parts.length >= 3 ? parts.slice(2).join(' - ') : workflow.name,
+                        url: workflow.html_url,
+                        badge_url: workflow.badge_url || null
+                    };
                     if (parts.length >= 3) {
                         const group = parts[0];
                         const category = parts[1];
@@ -210,9 +216,7 @@
                             let fileUrl = entry.url;
                             try {
                                 const urlObj = new URL(fileUrl);
-                                // Find the repo base: https://github.com/org/repo
                                 const pathParts = urlObj.pathname.split('/');
-                                // pathParts: ['', 'org', 'repo', 'actions', 'workflows', 'filename.yml']
                                 if (pathParts.length >= 6) {
                                     const repoBase = urlObj.origin + '/' + pathParts[1] + '/' + pathParts[2];
                                     const filename = pathParts.slice(-1)[0];
@@ -225,6 +229,53 @@
                             namePill.href = fileUrl;
                             namePill.target = '_blank';
                             namePill.rel = 'noopener noreferrer';
+                            // If badge_url exists, fetch SVG and extract last text (status)
+                            let statusSpan = document.createElement('span');
+                            statusSpan.style.marginLeft = '8px';
+                            statusSpan.style.fontWeight = 'bold';
+                            statusSpan.style.fontSize = '0.95em';
+                            statusSpan.style.color = '#57606a';
+                            if (entry.badge_url) {
+                                statusSpan.textContent = ' [ … ]';
+                                namePill.appendChild(statusSpan);
+                                fetch(entry.badge_url)
+                                    .then(r => r.text())
+                                    .then(svg => {
+                                        try {
+                                            const parser = new DOMParser();
+                                            const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+                                            const texts = svgDoc.querySelectorAll('text');
+                                            if (texts.length > 0) {
+                                                const status = texts[texts.length - 1].textContent.trim();
+                                                statusSpan.textContent = ` [${status}]`;
+                                                if (/pass|success|ok/i.test(status)) {
+                                                    statusSpan.style.color = '#2da44e';
+                                                } else if (/fail|error/i.test(status)) {
+                                                    statusSpan.style.color = '#cf222e';
+                                                } else if (/cancel|skip/i.test(status)) {
+                                                    statusSpan.style.color = '#d29922';
+                                                } else {
+                                                    statusSpan.style.color = '#57606a';
+                                                }
+                                            } else {
+                                                statusSpan.textContent = ' [unknown]';
+                                                statusSpan.style.color = '#57606a';
+                                            }
+                                        } catch (e) {
+                                            statusSpan.textContent = ' [unknown]';
+                                            statusSpan.style.color = '#57606a';
+                                            console.error('Badge SVG parse error:', e);
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        statusSpan.textContent = ' [unknown]';
+                                        statusSpan.style.color = '#57606a';
+                                        console.error('Badge fetch error:', err);
+                                    });
+                            } else {
+                                statusSpan.textContent = ' [no badge]';
+                                namePill.appendChild(statusSpan);
+                            }
                             namesList.appendChild(namePill);
                         });
                         groupDiv.appendChild(namesList);
