@@ -76,22 +76,36 @@ export function renderDashboard({ workflows, container }) {
                 } catch (e) { /* fallback to entry.url */ }
                 const namePill = document.createElement('a');
                 namePill.className = 'gh-name-pill';
-                namePill.textContent = entry.name;
                 namePill.href = fileUrl;
                 namePill.target = '_blank';
                 namePill.rel = 'noopener noreferrer';
+                namePill.style.display = 'flex';
+                namePill.style.alignItems = 'center';
+                namePill.style.justifyContent = 'space-between';
+                namePill.style.gap = '12px';
+                namePill.style.minHeight = '32px';
+                namePill.style.padding = '8px 16px';
                 // Visually indicate if workflow is not active
                 if (entry.state && entry.state !== 'active') {
                     namePill.style.opacity = '0.5';
                     namePill.style.textDecoration = 'line-through';
                     namePill.title = `Workflow state: ${entry.state}`;
                 }
-                // Always show a status span
+                // Name span
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = entry.name;
+                nameSpan.style.flex = '1 1 auto';
+                nameSpan.style.overflow = 'hidden';
+                nameSpan.style.textOverflow = 'ellipsis';
+                nameSpan.style.whiteSpace = 'nowrap';
+                namePill.appendChild(nameSpan);
+                // Status span
                 let statusSpan = document.createElement('span');
-                statusSpan.style.marginLeft = '8px';
                 statusSpan.style.fontWeight = 'bold';
                 statusSpan.style.fontSize = '0.95em';
                 statusSpan.style.color = '#57606a';
+                statusSpan.style.whiteSpace = 'nowrap';
+                statusSpan.style.marginLeft = '16px';
                 if (entry.badge_url) {
                     statusSpan.textContent = ' [ … ]';
                     namePill.appendChild(statusSpan);
@@ -133,6 +147,7 @@ export function renderDashboard({ workflows, container }) {
                     statusSpan.textContent = ' [no badge]';
                     namePill.appendChild(statusSpan);
                 }
+                namePill.appendChild(statusSpan);
                 namesList.appendChild(namePill);
             });
             groupDiv.appendChild(namesList);
