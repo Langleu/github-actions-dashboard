@@ -11,20 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Set up bash and make build script executable
-        run: chmod +x ./build-tampermonkey.sh
-
       - name: Update version in src/index.js
         id: version_update
         run: |
-          VERSION=$(echo ${{ github.event.release.tag_name }} | sed 's/^v//')
-          sed -i "" -E "s#(@version\s+).*#\1$VERSION#" src/index.js || true
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=${{ github.event.release.tag_name }}
+          sed -i -E "s#(@version\\s+).*#\\1$VERSION#" src/index.js || true
 
       - name: Build Tampermonkey userscript
         run: ./build-tampermonkey.sh
