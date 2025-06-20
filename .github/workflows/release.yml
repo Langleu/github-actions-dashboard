@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   build-and-attach:
     runs-on: ubuntu-latest
@@ -18,15 +21,17 @@ jobs:
           sed -i -E "s#(@version\\s+).*#\\1$VERSION#" src/index.js || true
 
       - name: Build Tampermonkey userscript
-        run: ./build-tampermonkey.sh
+        run: |
+          mkdir -p output
+          ./build-tampermonkey.sh
 
       - name: Commit and push version change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/index.js
-          git commit -m "chore: update userscript version to ${{ steps.version_update.outputs.version }} for release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
-          git push
+          git commit -m "chore: update userscript version to ${{ github.event.release.tag_name }} for release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
+          git push origin HEAD:${{ github.event.repository.default_branch }}
 
       - name: Upload userscript as release asset
         uses: softprops/action-gh-release@v2
