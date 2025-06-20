@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Actions Dashboard
 // @description  A better GitHub Actions Overview
-// @version      0.1.0
+// @version      0.2.0
 // @namespace    https://github.com/Langleu/github-actions-dashboard
 // @supportURL   https://github.com/Langleu/github-actions-dashboard
 // @author       Langleu
